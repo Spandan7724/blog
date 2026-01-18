@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const posts = (await getCollection('blog')) as CollectionEntry<'blog'>[];
+const published = posts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const base = import.meta.env.BASE_URL;
+const basePath = base.endsWith('/') ? base : `${base}/`;
+const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
+---
+
+<BaseLayout title="All Posts — spandan.log" description="All blog posts.">
+  <div class="container">
+    <section class="hero">
+      <h1>All Posts</h1>
+      <p class="hero-description">
+        Every post, sorted by date.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="post-list">
+        {published.map((post) => (
+          <a class="post-item" href={`${basePath}posts/${post.slug}/`}>
+            <time class="post-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+            <h3 class="post-title">{post.data.title}</h3>
+            <p class="post-excerpt">{post.data.description}</p>
+            <div class="post-tags">
+              {post.data.tags.slice(0, 3).map((tag: string) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

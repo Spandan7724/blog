@@ -1,0 +1,40 @@
+---
+---
+
+<button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+  <span class="theme-icon"></span>
+</button>
+
+<script is:inline>
+  const root = document.documentElement;
+  const key = 'theme';
+
+  const applyTheme = (theme) => {
+    if (theme === 'dark') {
+      root.setAttribute('data-theme', 'dark');
+    } else {
+      root.removeAttribute('data-theme');
+    }
+  };
+
+  const stored = localStorage.getItem(key);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initial = stored ?? (prefersDark ? 'dark' : 'light');
+  applyTheme(initial);
+
+  const button = document.querySelector('[data-theme-toggle]');
+  const icon = button?.querySelector('.theme-icon');
+  
+  const updateIcon = (theme) => {
+    if (icon) icon.textContent = theme === 'dark' ? '◐' : '◑';
+  };
+
+  updateIcon(initial);
+
+  button?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem(key, next);
+    updateIcon(next);
+  });
+</script>

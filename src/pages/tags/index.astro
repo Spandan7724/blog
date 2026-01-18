@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const posts = (await getCollection('blog')) as CollectionEntry<'blog'>[];
+const published = posts.filter((post) => !post.data.draft);
+
+const tagSet = new Set(published.flatMap((post) => post.data.tags));
+const tags = Array.from(tagSet).sort();
+
+const base = import.meta.env.BASE_URL;
+const basePath = base.endsWith('/') ? base : `${base}/`;
+const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
+---
+
+<BaseLayout title="Tags — spandan" description="Browse posts by topic.">
+  <div class="container">
+    <section class="hero">
+      <h1>Tags</h1>
+      <p class="hero-description">
+        Browse posts by topic.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="tags-grid">
+        {tags.map((tag: string) => (
+          <a class="tag-link" href={`${basePath}tags/${normalizeTag(tag)}/`}>{tag}</a>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
