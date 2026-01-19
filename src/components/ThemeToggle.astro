@@ -5,36 +5,36 @@
   <span class="theme-icon"></span>
 </button>
 
-<script is:inline>
-  const root = document.documentElement;
-  const key = 'theme';
+<script>
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const key = 'theme';
+    const button = document.querySelector('[data-theme-toggle]');
+    const icon = button?.querySelector('.theme-icon');
 
-  const applyTheme = (theme) => {
-    if (theme === 'dark') {
-      root.setAttribute('data-theme', 'dark');
-    } else {
-      root.removeAttribute('data-theme');
-    }
-  };
+    const getTheme = () => root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    
+    const updateIcon = (theme: string) => {
+      if (icon) icon.textContent = theme === 'dark' ? '◐' : '◑';
+    };
 
-  const stored = localStorage.getItem(key);
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initial = stored ?? (prefersDark ? 'dark' : 'light');
-  applyTheme(initial);
+    updateIcon(getTheme());
 
-  const button = document.querySelector('[data-theme-toggle]');
-  const icon = button?.querySelector('.theme-icon');
-  
-  const updateIcon = (theme) => {
-    if (icon) icon.textContent = theme === 'dark' ? '◐' : '◑';
-  };
+    button?.addEventListener('click', () => {
+      const next = getTheme() === 'dark' ? 'light' : 'dark';
+      if (next === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+      localStorage.setItem(key, next);
+      updateIcon(next);
+    });
+  }
 
-  updateIcon(initial);
+  // Run on initial load
+  initThemeToggle();
 
-  button?.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    localStorage.setItem(key, next);
-    updateIcon(next);
-  });
+  // Re-run after view transitions
+  document.addEventListener('astro:after-swap', initThemeToggle);
 </script>

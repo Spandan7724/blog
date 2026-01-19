@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import '../styles/global.css';
 
@@ -19,8 +20,33 @@ const basePath = base.endsWith('/') ? base : `${base}/`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    {description ? <meta name="description" content={description} /> : null}
+    {description && <meta name="description" content={description} />}
+    
+    <!-- Prevent theme flash -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme') ?? 
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      })();
+    </script>
+    
+    <!-- Persist theme across view transitions -->
+    <script is:inline>
+      document.addEventListener('astro:before-swap', (e) => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        if (theme === 'dark') {
+          e.newDocument.documentElement.setAttribute('data-theme', 'dark');
+        }
+      });
+    </script>
+    
+    <!-- Prefetch and preconnect hints -->
+    <link rel="dns-prefetch" href="https://github.com" />
     <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
+    
+    <!-- View Transitions for instant navigation -->
+    <ViewTransitions fallback="swap" />
   </head>
   <body>
     <header class="site-header">

@@ -401,13 +401,13 @@ a.tag:hover {
 
 /* Footer */
 .site-footer {
-  margin-top: 4rem;
-  padding: 2rem 0;
+  margin-top: 2rem;
+  padding: 0.75rem 0;
   border-top: 1px solid var(--border-light);
 }
 
 .site-footer p {
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
   color: var(--fg-faint);
   margin: 0;
 }
@@ -434,5 +434,18 @@ a.tag:hover {
 
   .post-header h1 {
     font-size: 1.625rem;
+  }
+}
+
+/* View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }
