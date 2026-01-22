@@ -5,29 +5,22 @@ interface Props {
   title: string;
   description: string;
   pubDate: Date;
-  tags: string[];
 }
 
-const { title, description, pubDate, tags } = Astro.props as Props;
-const base = import.meta.env.BASE_URL;
-const basePath = base.endsWith('/') ? base : `${base}/`;
-const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
+const { title, description, pubDate } = Astro.props as Props;
+
+const formatDate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
 ---
 
-<BaseLayout title={`${title} — spandan`} description={description}>
+<BaseLayout title={`${title} — Spandan`} description={description}>
   <div class="container">
     <article class="post-layout">
       <header class="post-header">
-        <time class="post-date">{pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+        <div class="post-meta">{formatDate(pubDate)}</div>
         <h1>{title}</h1>
-        <p class="post-excerpt">{description}</p>
-        {tags.length > 0 && (
-          <div class="post-tags">
-            {tags.map((tag: string) => (
-              <a class="tag" href={`${basePath}tags/${normalizeTag(tag)}/`}>{tag}</a>
-            ))}
-          </div>
-        )}
+        <p class="description">{description}</p>
       </header>
       <section class="prose">
         <slot />

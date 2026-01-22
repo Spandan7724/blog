@@ -15,7 +15,7 @@
     const getTheme = () => root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     
     const updateIcon = (theme: string) => {
-      if (icon) icon.textContent = theme === 'dark' ? '◐' : '◑';
+      if (icon) icon.textContent = theme === 'dark' ? '☀' : '☾';
     };
 
     updateIcon(getTheme());

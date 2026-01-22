@@ -9,45 +9,29 @@ const published = posts
 
 const base = import.meta.env.BASE_URL;
 const basePath = base.endsWith('/') ? base : `${base}/`;
-const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
+
+const formatDate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
 ---
 
-<BaseLayout title="spandan" description="Technical blog computer section things.">
+<BaseLayout title="Spandan" description="Technical blog on software engineering.">
   <div class="container">
-    <section class="hero">
-      <h1>Writing on comsci</h1>
-      <p class="hero-description">
-        testing this is a test text to emulate a test
+    <section class="about">
+      <h2>About</h2>
+      <p>
+        Welcome to my blog. I write about software engineering, programming, and technology.
       </p>
     </section>
 
     <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">Recent Posts</h2>
-      </div>
+      <h2 class="section-title">Published</h2>
       <div class="post-list">
         {published.map((post) => (
           <a class="post-item" href={`${basePath}posts/${post.slug}/`}>
-            <time class="post-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+            <div class="post-meta">{formatDate(post.data.pubDate)}</div>
             <h3 class="post-title">{post.data.title}</h3>
-            <p class="post-excerpt">{post.data.description}</p>
-            <div class="post-tags">
-              {post.data.tags.slice(0, 3).map((tag: string) => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
           </a>
-        ))}
-      </div>
-    </section>
-
-    <section class="section" id="tags">
-      <div class="section-header">
-        <h2 class="section-title">Topics</h2>
-      </div>
-      <div class="tags-grid">
-        {Array.from(new Set(published.flatMap((post) => post.data.tags))).sort().map((tag: string) => (
-          <a class="tag-link" href={`${basePath}tags/${normalizeTag(tag)}/`}>{tag}</a>
         ))}
       </div>
     </section>

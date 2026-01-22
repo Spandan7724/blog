@@ -21,16 +21,16 @@ const basePath = base.endsWith('/') ? base : `${base}/`;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    
+
     <!-- Prevent theme flash -->
     <script is:inline>
       (function() {
-        const theme = localStorage.getItem('theme') ?? 
+        const theme = localStorage.getItem('theme') ??
           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
       })();
     </script>
-    
+
     <!-- Persist theme across view transitions -->
     <script is:inline>
       document.addEventListener('astro:before-swap', (e) => {
@@ -40,21 +40,21 @@ const basePath = base.endsWith('/') ? base : `${base}/`;
         }
       });
     </script>
-    
-    <!-- Prefetch and preconnect hints -->
-    <link rel="dns-prefetch" href="https://github.com" />
+
     <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
-    
-    <!-- View Transitions for instant navigation -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <ViewTransitions fallback="swap" />
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="brand" href={basePath}>spandan</a>
+        <a class="brand" href={basePath}>Spandan Chavan</a>
         <nav class="nav-links">
-          <a href={basePath}>Posts</a>
-          <a href={`${basePath}tags/`}>Tags</a>
+          <a href={basePath}>Blog</a>
+          <span>/</span>
+          <a href="https://github.com/Spandan7724">Github</a>
           <ThemeToggle />
         </nav>
       </div>
@@ -62,10 +62,5 @@ const basePath = base.endsWith('/') ? base : `${base}/`;
     <main>
       <slot />
     </main>
-    <footer class="site-footer">
-      <div class="container">
-        <p>Built with Astro. Source on GitHub.</p>
-      </div>
-    </footer>
   </body>
 </html>

@@ -9,10 +9,9 @@ const published = posts
 
 const base = import.meta.env.BASE_URL;
 const basePath = base.endsWith('/') ? base : `${base}/`;
-const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
 ---
 
-<BaseLayout title="All Posts — spandan.log" description="All blog posts.">
+<BaseLayout title="All Posts — spandan" description="All blog posts.">
   <div class="container">
     <section class="hero">
       <h1>All Posts</h1>
@@ -28,11 +27,6 @@ const normalizeTag = (tag: string) => tag.toLowerCase().replace(/\s+/g, '-');
             <time class="post-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
             <h3 class="post-title">{post.data.title}</h3>
             <p class="post-excerpt">{post.data.description}</p>
-            <div class="post-tags">
-              {post.data.tags.slice(0, 3).map((tag: string) => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
           </a>
         ))}
       </div>
